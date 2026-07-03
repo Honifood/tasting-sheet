@@ -1,4 +1,4 @@
-const CACHE='honi-poke-qa-v1';
+const CACHE='honi-poke-qa-v2';
 self.addEventListener('install',function(e){self.skipWaiting();});
 self.addEventListener('activate',function(e){
   e.waitUntil(caches.keys().then(function(keys){return Promise.all(keys.filter(function(k){return k!==CACHE;}).map(function(k){return caches.delete(k);}));}));
@@ -7,7 +7,7 @@ self.addEventListener('activate',function(e){
 self.addEventListener('fetch',function(e){
   if(e.request.method!=='GET')return;
   e.respondWith(
-    fetch(e.request).then(function(res){
+    fetch(e.request,{cache:'no-store'}).then(function(res){
       var copy=res.clone();
       caches.open(CACHE).then(function(c){c.put(e.request,copy);}).catch(function(){});
       return res;
